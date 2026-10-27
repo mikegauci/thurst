@@ -1,19 +1,37 @@
 ---
+import media from '../lib/media.json';
 interface Props { title: string; category: string; video: string; embedTitle: string }
 const { title, category, video, embedTitle } = Astro.props;
+const videoId = video.split('?')[0];
+const previews: Record<string, string> = media;
+const playerUrl = `https://player.vimeo.com/video/${video}${video.includes('?') ? '&' : '?'}dnt=1&autoplay=1`;
 ---
 <article class="project">
-  <div class="project-video">
-    <iframe
-      src={`https://player.vimeo.com/video/${video}${video.includes('?') ? '&' : '?'}dnt=1&app_id=122963`}
-      title={embedTitle}
-      loading="lazy"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen
-    ></iframe>
+  <div class="project-video" data-player-url={playerUrl} data-player-title={embedTitle}>
+    <a class="project-preview" href={`https://vimeo.com/${videoId}${video.includes('?h=') ? `/${video.split('?h=')[1]}` : ''}`} aria-label={`Play ${title}`}>
+      <img src={previews[`project-${videoId}.webp`]} alt="" width="960" height="540" loading="lazy" decoding="async" />
+      <span class="project-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M8 5v14l11-7z" /></svg></span>
+    </a>
   </div>
   <div class="project-caption">
     <h3>{title}</h3>
     <p>{category}</p>
   </div>
 </article>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.project-preview').forEach(preview => {
+    preview.addEventListener('click', event => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const container = preview.parentElement;
+      if (!container?.dataset.playerUrl) return;
+      event.preventDefault();
+      const player = document.createElement('iframe');
+      player.src = container.dataset.playerUrl;
+      player.title = container.dataset.playerTitle ?? 'Project video';
+      player.allow = 'autoplay; fullscreen; picture-in-picture';
+      player.allowFullscreen = true;
+      container.replaceChildren(player);
+      player.focus();
+    });
+  });
+</script>

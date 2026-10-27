@@ -1,6 +1,6 @@
-@font-face { font-family: Gilroy; font-style: normal; font-weight: 300; font-display: swap; src: url('/assets/Gilroy-Light.otf') format('opentype'); }
-@font-face { font-family: Gilroy; font-style: normal; font-weight: 800; font-display: swap; src: url('/assets/Gilroy-ExtraBold.otf') format('opentype'); }
-@font-face { font-family: 'DIN Pro condensed bold'; font-style: normal; font-weight: 700; font-display: swap; src: url('/assets/DINPro-CondensedBold.ttf') format('truetype'); }
+@font-face { font-family: Gilroy; font-style: normal; font-weight: 300; font-display: swap; src: url('/media/Gilroy-Light.7158a0d2fabe.woff2') format('woff2'); }
+@font-face { font-family: Gilroy; font-style: normal; font-weight: 800; font-display: swap; src: url('/media/Gilroy-ExtraBold.609c24bff66a.woff2') format('woff2'); }
+@font-face { font-family: 'DIN Pro condensed bold'; font-style: normal; font-weight: 700; font-display: swap; src: url('/media/DINPro-CondensedBold.4778b5d7fb17.woff2') format('woff2'); }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #fff; color: #000; font: 300 20px/1.6 Gilroy, Helvetica, Arial, sans-serif; }
@@ -28,9 +28,12 @@ strong { font-weight: 800; }
 .header-navigation a { display: flex; align-items: center; height: 80px; font-weight: 800; line-height: 1; padding: 0 20px; }
 .header-navigation a:hover { color: #f2f2f282; }
 .menu-toggle { display: none; }
-.hero { padding: 100px 10px 60px; background: url('/assets/home-bg.jpg') center bottom/cover no-repeat; }
+.hero { padding: 100px 10px 60px; background: url('/media/home-bg-optimized.6cdc921b5685.webp') center bottom/cover no-repeat; }
 .showreel { display: block; position: relative; height: 600px; margin-bottom: 60px; }
-.showreel video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.showreel-poster,.showreel video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.showreel-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.showreel video { opacity: 0; }
+.showreel video.is-playing { opacity: 1; }
 .pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; background: white; color: black; font-size: 16px; font-weight: 800; line-height: 1; padding: 8px 14px; transition: background .3s, color .3s; }
 .pill:hover { color: white; background: black; }
 .hero-link { padding: 8.8px 30px; border: 2px solid white; }
@@ -38,9 +41,14 @@ strong { font-weight: 800; }
 .section-eyebrow { line-height: 32px; }
 .services-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .services-description p + p { margin-top: 32px; }
-.work { color: white; background: url('/assets/work-bg.jpg') center/cover no-repeat; }
+.work { color: white; background: url('/media/work-bg-optimized.13d0f3991b55.webp') center/cover no-repeat; }
 .work-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 30px 0; }
-.project-video { aspect-ratio: 16/9; }
+.project-video { aspect-ratio: 16/9; position: relative; background: #000; }
+.project-preview { display: block; width: 100%; height: 100%; position: relative; }
+.project-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.project-play { position: absolute; inset: 0; display: grid; place-items: center; margin: auto; width: 72px; height: 48px; border-radius: 5px; color: white; background: #000c; }
+.project-play svg { fill: currentColor; }
+.project-preview:hover .project-play,.project-preview:focus-visible .project-play { background: #00adef; }
 .project-video iframe { display: block; border: 0; width: 100%; height: 100%; }
 .project-caption { display: flow-root; margin-top: 24px; }
 .project-caption p { font-size: 16px; line-height: 32px; margin-bottom: 20px; }
@@ -144,3 +152,10 @@ strong { font-weight: 800; }
   html { scroll-behavior: auto; }
   *,*::before,*::after { transition: none !important; }
 }
+
+/* Keep compact controls easy to activate on touch screens. */
+.pill,.submit-button { min-height: 44px; }
+.social-links { gap: 4px; height: 44px; }
+.social-links a { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+.footer-navigation a { min-height: 44px; display: inline-flex; align-items: center; }
+.footer-contact a { display: inline-block; min-height: 24px; }

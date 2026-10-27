@@ -14,6 +14,8 @@ npm run dev
 
 Content lives in `src/pages/index.astro`; project video markup is in `src/components/Project.astro`; styling is in `src/styles/global.css`. Assets live in `public/assets`. Editing these files and deploying updates the site.
 
+Optimised media lives in `public/media` with a content hash in every filename so it can be cached for a year. When replacing media, generate a new hash/filename and update its references (including `src/lib/media.json` for project previews); do not overwrite an existing hashed file. Fonts use WOFF2. The hero displays a prioritised poster before starting its responsive video after page load; reduced-motion and data-saving visitors retain the poster. Project players load only when clicked, with ordinary Vimeo links as a no-JavaScript fallback.
+
 ```sh
 npm run check
 npm test

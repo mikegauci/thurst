@@ -50,8 +50,10 @@ const structuredData = {
     <link rel="canonical" href={seo.url} />
     <link rel="icon" type="image/png" href="/assets/cropped-favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/assets/cropped-favicon-180x180.png" />
-    <link rel="preload" href="/assets/Gilroy-ExtraBold.otf" as="font" type="font/otf" crossorigin />
-    <link rel="preload" href="/assets/Gilroy-Light.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="/media/Gilroy-ExtraBold.609c24bff66a.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/media/Gilroy-Light.7158a0d2fabe.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/media/showreel-poster-mobile.fba30df9e1ea.webp" as="image" media="(max-width: 976px)" fetchpriority="high" />
+    <link rel="preload" href="/media/showreel-poster-desktop.78a4fbf24e79.webp" as="image" media="(min-width: 977px)" fetchpriority="high" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Thrust Studio" />
     <meta property="og:title" content={seo.title} />
@@ -84,10 +86,11 @@ const structuredData = {
       <section class="hero" aria-label="Thrust Studio showreel">
         <div class="wide-container">
           <a class="showreel" href="https://vimeo.com/853001489" target="_blank" rel="noopener noreferrer" aria-label="Watch the Thrust Studio showreel on Vimeo">
-            <video autoplay loop muted playsinline preload="metadata" aria-hidden="true">
-              <source src="/assets/thrust-mobile-video.mp4" type="video/mp4" media="(max-width: 976px)" />
-              <source src="/assets/showreel-thrust.mp4" type="video/mp4" />
-            </video>
+            <picture class="showreel-poster">
+              <source srcset="/media/showreel-poster-mobile.fba30df9e1ea.webp" media="(max-width: 976px)" />
+              <img src="/media/showreel-poster-desktop.78a4fbf24e79.webp" alt="" width="1440" height="810" fetchpriority="high" />
+            </picture>
+            <video id="hero-video" autoplay loop muted playsinline preload="none" aria-hidden="true" data-mobile-src="/media/showreel-mobile-optimized.f0db907869ce.mp4" data-desktop-src="/media/showreel-optimized.892ca78fc984.mp4"></video>
           </a>
           <div class="center"><a class="pill hero-link" href="https://vimeo.com/thruststudio" target="_blank" rel="noopener noreferrer">see work</a></div>
         </div>
@@ -118,7 +121,7 @@ const structuredData = {
               <Project title="iCentre" category="Launch event coverage" video="682942836?h=14d7a32a10" embedTitle="Iphone 13 - icentre event" />
             </div>
           </div>
-          <div class="center"><a href="https://vimeo.com/thruststudio" class="pill work-link">Click Here</a></div>
+          <div class="center"><a href="https://vimeo.com/thruststudio" class="pill work-link">More work on Vimeo</a></div>
         </div>
       </section>
       <section class="clients section" aria-labelledby="clients-title">
@@ -157,6 +160,18 @@ const structuredData = {
     </footer>
     <a class="scroll-top" href="#top" aria-label="Scroll to Top" hidden><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 15 7-7 7 7" /></svg></a>
     <script>
+      const heroVideo = document.querySelector<HTMLVideoElement>('#hero-video');
+      function startShowreel() {
+        const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+        if (!heroVideo || matchMedia('(prefers-reduced-motion: reduce)').matches || connection?.saveData) return;
+        const source = matchMedia('(max-width: 976px)').matches ? heroVideo.dataset.mobileSrc : heroVideo.dataset.desktopSrc;
+        if (!source) return;
+        heroVideo.addEventListener('playing', () => heroVideo.classList.add('is-playing'), { once: true });
+        heroVideo.src = source;
+        void heroVideo.play().catch(() => { /* Keep the preview visible if autoplay is unavailable. */ });
+      }
+      if (document.readyState === 'complete') startShowreel();
+      else window.addEventListener('load', startShowreel, { once: true });
       const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
       const navigation = document.querySelector<HTMLElement>('.header-navigation');
       function closeMenu() { menu?.setAttribute('aria-expanded', 'false'); navigation?.classList.remove('is-open'); }
