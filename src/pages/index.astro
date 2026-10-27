@@ -8,24 +8,63 @@ const navigation = [
   { label: 'contact', href: '#contact' },
 ];
 const year = new Date().getFullYear();
+const seo = {
+  title: 'Thrust Studio | Videography, Photography & Design in Malta',
+  description: 'Thrust is a Maltese creative studio offering videography, photography and design. We help brands and businesses showcase their stories visually.',
+  url: 'https://www.thruststudio.co/',
+  image: 'https://www.thruststudio.co/assets/thrust-logo.png',
+};
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${seo.url}#organization`,
+      name: 'Thrust Studio',
+      url: seo.url,
+      logo: seo.image,
+      description: seo.description,
+      email: 'info@thruststudio.co',
+      telephone: ['+35679824401', '+35679433133'],
+      sameAs: ['https://www.facebook.com/thrust.studio/', 'https://www.instagram.com/thrust_studio/', 'https://vimeo.com/thruststudio'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${seo.url}#website`,
+      name: 'Thrust Studio',
+      url: seo.url,
+      inLanguage: 'en',
+      publisher: { '@id': `${seo.url}#organization` },
+    },
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Home - Thrust Studio</title>
-    <meta name="description" content="Thrust is a Maltese based creative studio offering videography, photography and design services. We help you showcase your stories visually." />
-    <link rel="canonical" href="https://www.thruststudio.co/" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={seo.url} />
     <link rel="icon" type="image/png" href="/assets/cropped-favicon-32x32.png" />
     <link rel="apple-touch-icon" href="/assets/cropped-favicon-180x180.png" />
     <link rel="preload" href="/assets/Gilroy-ExtraBold.otf" as="font" type="font/otf" crossorigin />
     <link rel="preload" href="/assets/Gilroy-Light.otf" as="font" type="font/otf" crossorigin />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Thrust Studio" />
-    <meta property="og:description" content="Videography, photography and design. A creative studio based in Malta." />
-    <meta property="og:url" content="https://www.thruststudio.co/" />
-    <meta property="og:image" content="https://www.thruststudio.co/assets/thrust-logo.png" />
+    <meta property="og:site_name" content="Thrust Studio" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:url" content={seo.url} />
+    <meta property="og:image" content={seo.image} />
+    <meta property="og:image:alt" content="Thrust Studio logo" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={seo.image} />
+    <meta name="twitter:image:alt" content="Thrust Studio logo" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
     <meta name="theme-color" content="#000000" />
   </head>
   <body id="top">
