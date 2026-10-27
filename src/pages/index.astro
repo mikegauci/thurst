@@ -1,0 +1,150 @@
+---
+import '../styles/global.css';
+import Project from '../components/Project.astro';
+const navigation = [
+  { label: 'home', href: '/' },
+  { label: 'what we do', href: '#what-we-do' },
+  { label: 'work', href: '#work' },
+  { label: 'contact', href: '#contact' },
+];
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home - Thrust Studio</title>
+    <meta name="description" content="Thrust is a Maltese based creative studio offering videography, photography and design services. We help you showcase your stories visually." />
+    <link rel="canonical" href="https://www.thruststudio.co/" />
+    <link rel="icon" type="image/png" href="/assets/cropped-favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/assets/cropped-favicon-180x180.png" />
+    <link rel="preload" href="/assets/Gilroy-ExtraBold.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="/assets/Gilroy-Light.otf" as="font" type="font/otf" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Thrust Studio" />
+    <meta property="og:description" content="Videography, photography and design. A creative studio based in Malta." />
+    <meta property="og:url" content="https://www.thruststudio.co/" />
+    <meta property="og:image" content="https://www.thruststudio.co/assets/thrust-logo.png" />
+    <meta name="theme-color" content="#000000" />
+  </head>
+  <body id="top">
+    <a href="#content" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Thrust Studio home"><img src="/assets/thrust-logo.png" alt="Thrust Studio" width="100" height="44" /></a>
+        <button class="menu-toggle" type="button" aria-label="Main Menu" aria-expanded="false" aria-controls="primary-navigation">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+        </button>
+        <nav id="primary-navigation" class="header-navigation" aria-label="Main navigation">
+          {navigation.map(({label, href}) => <a href={href} aria-current={href === '/' ? 'page' : undefined}>{label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="content">
+      <section class="hero" aria-label="Thrust Studio showreel">
+        <div class="wide-container">
+          <a class="showreel" href="https://vimeo.com/853001489" target="_blank" rel="noopener noreferrer" aria-label="Watch the Thrust Studio showreel on Vimeo">
+            <video autoplay loop muted playsinline preload="metadata" aria-hidden="true">
+              <source src="/assets/thrust-mobile-video.mp4" type="video/mp4" media="(max-width: 976px)" />
+              <source src="/assets/showreel-thrust.mp4" type="video/mp4" />
+            </video>
+          </a>
+          <div class="center"><a class="pill hero-link" href="https://vimeo.com/thruststudio" target="_blank" rel="noopener noreferrer">see work</a></div>
+        </div>
+      </section>
+      <section id="what-we-do" class="services section">
+        <div class="wide-container">
+          <p class="section-eyebrow">what we do</p>
+          <div class="services-columns">
+            <h1>VIDEOGRAPHY<br />PHOTOGRAPHY<br />DESIGN</h1>
+            <div class="services-description">
+              <p>Founded by two creatives in 2023, Thrust is a Maltese based studio offering videography, photography and design services to those looking to showcase their stories visually in the best possible way.</p>
+              <p>We are fun, fast and efficient to work with.</p>
+              <p>We’re easy to chat with, just drop us a message.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="work" class="work section">
+        <div class="wide-container">
+          <h2>some of our work</h2>
+          <div class="work-columns">
+            <div class="project-column">
+              <Project title="Sullivan Maritime" category="Documentary" video="682963536" embedTitle="Sullivan Maritime DOC" />
+              <Project title="Heritage Malta" category="Documentary" video="722332217" embedTitle="Heritage Malta Documentary" />
+            </div>
+            <div class="project-column">
+              <Project title="Distinguished Gentlemen’s Drive" category="International AD" video="845854532" embedTitle="DGD | Campaign Promo" />
+              <Project title="iCentre" category="Launch event coverage" video="682942836?h=14d7a32a10" embedTitle="Iphone 13 - icentre event" />
+            </div>
+          </div>
+          <div class="center"><a href="https://vimeo.com/thruststudio" class="pill work-link">Click Here</a></div>
+        </div>
+      </section>
+      <section class="clients section" aria-labelledby="clients-title">
+        <div class="wide-container">
+          <h2 id="clients-title">those who <img src="/assets/thrust-logo.png" alt="thrust" width="80" height="35" loading="lazy" /> us</h2>
+          <picture>
+            <source media="(max-width: 976px)" srcset="/assets/logos-mobile-1024x700.png" />
+            <img class="client-logos" src="/assets/logos-desktop-1024x216.png" alt="Some of the clients who trust Thrust Studio" width="1024" height="216" loading="lazy" />
+          </picture>
+        </div>
+      </section>
+      <section id="contact" class="contact section">
+        <div class="contact-container">
+          <h2>contact us</h2>
+          <form id="contact-form" action="/api/contact" method="post" aria-label="Contact form">
+            <div class="form-row"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required maxlength="120" /></div>
+            <div class="form-row"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" /></div>
+            <div class="form-row message-row"><label for="message">Message</label><textarea id="message" name="message" rows="5" maxlength="5000"></textarea></div>
+            <div class="honeypot" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+            <button class="submit-button" type="submit">Submit</button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner wide-container">
+        <div class="footer-brand"><a href="/" aria-label="Thrust Studio home"><img src="/assets/thrust-logo.png" alt="Thrust Studio" width="122" height="54" loading="lazy" /></a><p>Rotta {year} &nbsp;© All rights reserved</p></div>
+        <nav class="footer-navigation" aria-label="Footer navigation">{navigation.map(({label,href})=><a href={href}>{label}</a>)}</nav>
+        <div class="social-links">
+          <a href="https://www.facebook.com/thrust.studio/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 320 512" aria-hidden="true"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" /></svg></a>
+          <a href="https://www.instagram.com/thrust_studio/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 448 512" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.8 224.1 370.8 339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1S5.2 128.9 3.4 164.8c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" /></svg></a>
+        </div>
+        <p class="footer-contact"><strong><a href="mailto:info@thruststudio.co">info@thruststudio.co</a><br /><a href="tel:79824401">79824401</a>/<a href="tel:79433133">79433133</a></strong><br /><strong>Thrust</strong> a company by <strong><a href="https://rotta.mt/" target="_blank" rel="noopener noreferrer">Rotta Ltd</a></strong></p>
+      </div>
+    </footer>
+    <a class="scroll-top" href="#top" aria-label="Scroll to Top" hidden><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m5 15 7-7 7 7" /></svg></a>
+    <script>
+      const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
+      const navigation = document.querySelector<HTMLElement>('.header-navigation');
+      function closeMenu() { menu?.setAttribute('aria-expanded', 'false'); navigation?.classList.remove('is-open'); }
+      menu?.addEventListener('click', () => {
+        const open = menu.getAttribute('aria-expanded') !== 'true';
+        menu.setAttribute('aria-expanded', String(open)); navigation?.classList.toggle('is-open', open);
+      });
+      navigation?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+      const scrollTop = document.querySelector<HTMLAnchorElement>('.scroll-top');
+      function updateScrollTop() { if (scrollTop) scrollTop.hidden = window.scrollY < 300; }
+      window.addEventListener('scroll', updateScrollTop, { passive: true }); updateScrollTop();
+      const form = document.querySelector<HTMLFormElement>('#contact-form');
+      const status = document.querySelector<HTMLElement>('#form-status');
+      form?.addEventListener('submit', async event => {
+        event.preventDefault();
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        if (!button || !status) return;
+        button.disabled = true; button.textContent = 'Sending…'; status.textContent = '';
+        try {
+          const response = await fetch('/api/contact', { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) });
+          const result = await response.json();
+          status.textContent = result.message;
+          if (response.ok) form.reset();
+        } catch { status.textContent = 'Your message could not be sent. Please email info@thruststudio.co or try again.'; }
+        finally { button.disabled = false; button.textContent = 'Submit'; }
+      });
+    </script>
+  </body>
+</html>
