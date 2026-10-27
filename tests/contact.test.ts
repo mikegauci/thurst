@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { handleContact } from '../src/lib/contact.ts';
 
-const env = { RESEND_API_KEY: 'test-only-key', CONTACT_FROM: 'Thrust <website@example.com>', CONTACT_TO: 'studio@example.com' };
+const env = { MAILJET_API_KEY: 'test-only-key', MAILJET_SECRET_KEY: 'test-only-secret', CONTACT_FROM: 'Thrust <website@example.com>', CONTACT_TO: 'studio@example.com' };
 function submission(fields: Record<string, string> = {}, headers: Record<string, string> = {}) {
   return new Request('https://www.thruststudio.co/api/contact', {
     method: 'POST',
@@ -12,18 +12,18 @@ function submission(fields: Record<string, string> = {}, headers: Record<string,
 }
 const mustNotSend: typeof fetch = async () => { assert.fail('Unexpected email delivery attempt'); };
 
-test('sends through Resend with the verified sender and visitor as reply-to', async () => {
+test('sends through Mailjet with the verified sender and visitor as reply-to', async () => {
   let calls = 0;
   const response = await handleContact(submission(), env, async (url, init) => {
     calls++;
-    assert.equal(url, 'https://api.resend.com/emails');
-    const payload = JSON.parse(init?.body as string);
-    assert.equal(payload.from, env.CONTACT_FROM);
-    assert.deepEqual(payload.to, [env.CONTACT_TO]);
-    assert.equal(payload.reply_to, 'visitor@example.com');
-    assert.match(payload.text, /A project enquiry\./);
-    assert.equal(payload.html, undefined);
-    return Response.json({ id: 'mock-id' });
+    assert.equal(url, 'https://api.mailjet.com/v3.1/send');
+    const payload = JSON.parse(init?.body as string).Messages[0];
+    assert.deepEqual(payload.From, { Email: 'website@example.com', Name: 'Thrust' });
+    assert.deepEqual(payload.To, [{ Email: env.CONTACT_TO }]);
+    assert.equal(payload.ReplyTo.Email, 'visitor@example.com');
+    assert.match(payload.TextPart, /A project enquiry\./);
+    assert.equal(payload.HTMLPart, undefined);
+    return Response.json({ Messages: [{ Status: 'success' }] });
   });
   assert.equal(response.status, 200);
   assert.equal(calls, 1);

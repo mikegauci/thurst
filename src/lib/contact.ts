@@ -1,5 +1,6 @@
 interface ContactEnvironment {
-  RESEND_API_KEY?: string;
+  MAILJET_API_KEY?: string;
+  MAILJET_SECRET_KEY?: string;
   CONTACT_FROM?: string;
   CONTACT_TO?: string;
 }
@@ -62,21 +63,27 @@ export async function handleContact(request: Request, env: ContactEnvironment, s
   if (typeof email !== 'string' || email.length > 254 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) return respond('Please enter a valid email address.', 400);
   if (typeof message !== 'string' || message.length > 5000) return respond('Please keep your message under 5,000 characters.', 400);
 
-  if (!env.RESEND_API_KEY || !env.CONTACT_FROM || !env.CONTACT_TO) return respond(UNAVAILABLE, 503);
+  if (!env.MAILJET_API_KEY || !env.MAILJET_SECRET_KEY || !env.CONTACT_FROM || !env.CONTACT_TO) return respond(UNAVAILABLE, 503);
+  const sender = /^(.*?)\s*<([^<>]+)>$/.exec(env.CONTACT_FROM);
+  const from = sender ? { Email: sender[2].trim(), Name: sender[1].trim() } : { Email: env.CONTACT_FROM.trim() };
   try {
-    const result = await send('https://api.resend.com/emails', {
+    const result = await send('https://api.mailjet.com/v3.1/send', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Basic ${Buffer.from(`${env.MAILJET_API_KEY}:${env.MAILJET_SECRET_KEY}`).toString('base64')}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: env.CONTACT_FROM,
-        to: [env.CONTACT_TO],
-        reply_to: email.trim(),
-        subject: `Website enquiry from ${name.trim()}`,
-        text: `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
+        Messages: [{
+          From: from,
+          To: [{ Email: env.CONTACT_TO }],
+          ReplyTo: { Email: email.trim(), Name: name.trim() },
+          Subject: `Website enquiry from ${name.trim()}`,
+          TextPart: `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
+        }],
       }),
       signal: AbortSignal.timeout(10_000),
     });
     if (!result.ok) return respond(UNAVAILABLE, 502);
+    const delivery = await result.json();
+    if (delivery.Messages?.[0]?.Status !== 'success') return respond(UNAVAILABLE, 502);
     return respond(SUCCESS, 200);
   } catch { return respond(UNAVAILABLE, 502); }
 }

@@ -28,17 +28,18 @@ Set the following **server-side** environment variables for the intended deploym
 
 | Variable | Value |
 | --- | --- |
-| `RESEND_API_KEY` | Sending API key from Resend |
-| `CONTACT_FROM` | Sender on a Resend-verified domain, e.g. `Thrust Studio <website@thruststudio.co>` |
+| `MAILJET_API_KEY` | Mailjet public API key |
+| `MAILJET_SECRET_KEY` | Mailjet secret API key |
+| `CONTACT_FROM` | Sender on a Mailjet-verified domain, e.g. `Thrust Studio <website@thruststudio.co>` |
 | `CONTACT_TO` | Destination mailbox, normally `info@thruststudio.co` |
 
-Redeploy after setting variables. The contact endpoint validates input, limits request sizes, checks browser origin, discards honeypot submissions, and sends plain-text email with the visitor as reply-to. Without these variables it returns an honest failure message with the contact email. Tests mock Resend: no real email is sent by tests. End-to-end delivery must be verified after credentials and the sender domain are configured. Use Vercel Firewall rate limiting on `/api/contact` for production abuse protection; the honeypot is only basic filtering.
+Redeploy after setting variables. The contact endpoint validates input, limits request sizes, checks browser origin, discards honeypot submissions, and sends plain-text email with the visitor as reply-to. Without these variables it returns an honest failure message with the contact email. Tests mock Mailjet: no real email is sent by tests. End-to-end delivery must be verified after credentials and the sender domain are configured. Use Vercel Firewall rate limiting on `/api/contact` for production abuse protection; the honeypot is only basic filtering.
 
 ## Domain cutover
 
 1. Review the Vercel deployment on desktop and mobile, play the Vimeo projects, and verify real form delivery.
 2. Add `www.thruststudio.co` and `thruststudio.co` to the Vercel project. Redirect the apex to `www` to preserve the existing canonical URL.
-3. Apply the DNS records shown by Vercel. Preserve existing MX and mail-related TXT records so email keeps working. Add only the sender-verification records required by Resend.
+3. Apply the DNS records shown by Vercel. Preserve existing MX and mail-related TXT records so email keeps working. Add only the sender-verification records required by Mailjet.
 4. Confirm HTTPS, both hostnames, navigation, video playback, and form delivery on the final domain.
 5. Archive the WordPress backup and retire WordPress hosting after the new site is verified. No code or asset requests to the old hosting are required.
 
