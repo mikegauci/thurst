@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import media from '../lib/media.json';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found | Thrust Studio</title>
+    <meta name="description" content="This page is out of frame. Head back to Thrust Studio for videography, photography and design." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" type="image/png" href="/assets/cropped-favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/assets/cropped-favicon-180x180.png" />
+    <link rel="preload" href={media['DINPro-CondensedBold.woff2']} as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <div class="not-found" style={`--error-background: url('${media['work-bg-optimized.webp']}')`}>
+      <a class="skip-link" href="#content">Skip to content</a>
+      <header class="error-header">
+        <a href="/" aria-label="Thrust Studio home"><img src="/assets/thrust-logo.png" alt="Thrust Studio" width="122" height="54" /></a>
+        <a class="contact-link" href="/#contact">let’s talk <span aria-hidden="true">↗</span></a>
+      </header>
+      <main id="content" class="error-content">
+        <div class="error-number" aria-hidden="true">404</div>
+        <p class="error-eyebrow">page not found</p>
+        <h1>THIS PAGE IS<br />OUT OF FRAME.</h1>
+        <p class="error-description">We couldn’t find that page.<br />Let’s get you back to the good stuff.</p>
+        <a class="pill home-link" href="/"><span aria-hidden="true">←</span> back to home</a>
+      </main>
+      <footer class="error-footer">
+        <p>videography. photography. design.</p>
+        <a href="mailto:info@thruststudio.co">info@thruststudio.co</a>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .not-found { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; padding: 28px max(24px, calc((100vw - 1350px) / 2)); background: linear-gradient(120deg, #0009, #0003), var(--error-background) center/cover #000; color: #fff; }
+  .error-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .error-header img { display: block; width: 122px; height: 54px; object-fit: contain; }
+  .contact-link { min-height: 44px; display: inline-flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 800; }
+  .error-content { text-align: center; padding: 26px 0 52px; align-self: center; }
+  .error-number { font: 700 clamp(132px, 21vw, 260px)/.9 'DIN Pro condensed bold', sans-serif; letter-spacing: -.035em; color: transparent; -webkit-text-stroke: 1px #ffffff80; margin-bottom: 20px; }
+  .error-eyebrow { font-size: 14px; margin-bottom: 12px; }
+  h1 { font-size: clamp(44px, 6vw, 76px); line-height: 1; }
+  .error-description { font-size: 18px; line-height: 1.5; margin-top: 24px; }
+  .home-link { gap: 14px; margin-top: 30px; padding: 14px 26px; border: 1px solid #fff; }
+  .home-link:hover { background: transparent; color: #fff; }
+  .error-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-top: 1px solid #ffffff45; padding-top: 18px; font-size: 14px; }
+  .error-footer a { min-height: 44px; display: inline-flex; align-items: center; }
+  .contact-link:hover,.error-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 544px) {
+    .not-found { padding: 20px; }
+    .error-header img { width: 100px; height: 44px; }
+    .error-content { padding-block: 40px; }
+    .error-number { font-size: 160px; }
+    .error-description { font-size: 16px; }
+    .error-footer { flex-direction: column; gap: 0; text-align: center; font-size: 12px; }
+  }
+</style>
